@@ -17,13 +17,3 @@ func TestSQLiteConnectAndWriteDB(t *testing.T) {
 
 	dbutils.ConnectAndWriteDBTest(t, client)
 }
-
-// type PostgresClient struct {
-// 	gormDB *gorm.DB
-
-// 	dbName     string
-// 	pgHost     string
-// 	pgUser     string
-// 	pgPort     string
-// 	pgPassword string
-// }
