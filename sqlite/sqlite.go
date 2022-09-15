@@ -10,16 +10,16 @@ import (
 type SQLiteClient struct {
 	gormDB *gorm.DB
 
-	sqliteFile string
+	SQLiteFile string
 }
 
 func (c *SQLiteClient) RegisterFlags(cmd *cobra.Command) {
-	cmd.PersistentFlags().StringVarP(&c.sqliteFile, "sqlite-file", "", "gorm.db", "")
+	cmd.PersistentFlags().StringVarP(&c.SQLiteFile, "sqlite-file", "", "gorm.db", "")
 	cmd.MarkPersistentFlagRequired("sqlite-file")
 }
 
 func (c *SQLiteClient) Connect(config *gorm.Config) {
-	db, err := gorm.Open(sqlite.Open(c.sqliteFile), config)
+	db, err := gorm.Open(sqlite.Open(c.SQLiteFile), config)
 	errcheck.Check(err)
 
 	c.gormDB = db

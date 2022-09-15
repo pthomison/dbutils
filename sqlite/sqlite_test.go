@@ -12,7 +12,7 @@ func TestSQLiteConnectAndWriteDB(t *testing.T) {
 	dbLocation := "./gorm.db"
 
 	client := &SQLiteClient{
-		sqliteFile: dbLocation,
+		SQLiteFile: dbLocation,
 	}
 
 	dbutils.ConnectAndWriteDBTest(t, client)
