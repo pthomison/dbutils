@@ -1,9 +1,9 @@
 package sqlite
 
 import (
+	"github.com/glebarez/sqlite" // pure go driver
 	"github.com/pthomison/errcheck"
 	"github.com/spf13/cobra"
-	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
 
