@@ -1,6 +1,8 @@
 package dbutils
 
 import (
+	"fmt"
+
 	"github.com/pthomison/errcheck"
 	"github.com/spf13/cobra"
 	"gorm.io/gorm"
@@ -18,25 +20,12 @@ func Migrate(c DBClient, obj interface{}) {
 	errcheck.Check(err)
 }
 
-func SelectAll[T any](c DBClient, columns []string) []T {
-	var output []T
-	result := c.DB().Select(columns).Find(&output)
-	errcheck.Check(result.Error)
-
-	return output
-}
-
-func SelectWhere[T any](c DBClient, columns []string, whereQuery interface{}, whereArgs ...interface{}) []T {
-	var output []T
-	result := c.DB().Where(whereQuery, whereArgs).Select(columns).Find(&output)
-	errcheck.Check(result.Error)
-
-	return output
-}
-
 func Create[T any](c DBClient, objs []T) {
-	result := c.DB().Create(objs)
+	fmt.Println(objs)
+	result := c.DB().Create(&objs)
 	errcheck.Check(result.Error)
+	fmt.Printf("%+v\n", result)
+
 }
 
 func CreateOrOverwrite[T any](c DBClient, objs []T) {

@@ -2,6 +2,7 @@ package dbutils
 
 import (
 	"errors"
+	"fmt"
 	"testing"
 
 	"github.com/pthomison/errcheck"
@@ -42,7 +43,9 @@ func ConnectAndWriteDBTest(t *testing.T, dbc DBClient) {
 
 	Create(dbc, data)
 
-	fetchedData = SelectAll[TestData](dbc, nil)
+	fetchedData = Query[TestData](dbc.DB())
+
+	fmt.Println(fetchedData)
 
 	if len(fetchedData) == 0 || !data[0].Compare(&fetchedData[0]) {
 		errcheck.CheckTest(errors.New("injected data doesn't match retrieved data"), t)
@@ -50,10 +53,10 @@ func ConnectAndWriteDBTest(t *testing.T, dbc DBClient) {
 
 	DeleteAll(dbc, &TestData{})
 
-	fetchedData = SelectAll[TestData](dbc, nil)
+	fetchedData = Query[TestData](dbc.DB())
 
 	if len(fetchedData) != 0 {
-		errcheck.CheckTest(errors.New("injected data doesn't match retrieved data"), t)
+		errcheck.CheckTest(errors.New("delete failed"), t)
 	}
 
 }
