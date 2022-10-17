@@ -19,6 +19,20 @@ type PostgresClient struct {
 	pgPassword string
 }
 
+func New(hostname string, username string, port string, password string) *PostgresClient {
+	client := &PostgresClient{
+		dbName:     "postgres",
+		pgHost:     hostname,
+		pgUser:     username,
+		pgPort:     port,
+		pgPassword: password,
+	}
+
+	client.Connect(&gorm.Config{})
+
+	return client
+}
+
 func (c *PostgresClient) RegisterFlags(cmd *cobra.Command) {
 	cmd.PersistentFlags().StringVarP(&c.dbName, "db-name", "", "postgres", "")
 	cmd.PersistentFlags().StringVarP(&c.pgHost, "postgres-host", "", "", "")

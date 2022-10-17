@@ -13,6 +13,16 @@ type SQLiteClient struct {
 	SQLiteFile string
 }
 
+func New(sqliteFile string) *SQLiteClient {
+	client := &SQLiteClient{
+		SQLiteFile: sqliteFile,
+	}
+
+	client.Connect(&gorm.Config{})
+
+	return client
+}
+
 func (c *SQLiteClient) RegisterFlags(cmd *cobra.Command) {
 	cmd.PersistentFlags().StringVarP(&c.SQLiteFile, "sqlite-file", "", "gorm.db", "")
 	cmd.MarkPersistentFlagRequired("sqlite-file")
