@@ -13,6 +13,11 @@ type DBClient interface {
 	RegisterFlags(cmd *cobra.Command)
 }
 
+func Migrate(c DBClient, obj interface{}) {
+	err := c.DB().AutoMigrate(obj)
+	errcheck.Check(err)
+}
+
 func SelectAll[T any](c DBClient, columns []string) []T {
 	var output []T
 	result := c.DB().Select(columns).Find(&output)
@@ -36,5 +41,10 @@ func Create[T any](c DBClient, objs []T) {
 
 func CreateOrOverwrite[T any](c DBClient, objs []T) {
 	result := c.DB().Clauses(clause.OnConflict{UpdateAll: true}).Create(objs)
+	errcheck.Check(result.Error)
+}
+
+func DeleteAll(c DBClient, obj interface{}) {
+	result := c.DB().Where("1 = 1").Unscoped().Delete(obj)
 	errcheck.Check(result.Error)
 }

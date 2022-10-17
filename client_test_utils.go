@@ -30,8 +30,7 @@ func ConnectAndWriteDBTest(t *testing.T, dbc DBClient) {
 
 	dbc.Connect(&gorm.Config{})
 
-	err := dbc.DB().AutoMigrate(&TestData{})
-	errcheck.CheckTest(err, t)
+	Migrate(dbc, &TestData{})
 
 	data = []TestData{
 		TestData{
@@ -45,7 +44,15 @@ func ConnectAndWriteDBTest(t *testing.T, dbc DBClient) {
 
 	fetchedData = SelectAll[TestData](dbc, nil)
 
-	if !data[0].Compare(&fetchedData[0]) {
+	if len(fetchedData) == 0 || !data[0].Compare(&fetchedData[0]) {
+		errcheck.CheckTest(errors.New("injected data doesn't match retrieved data"), t)
+	}
+
+	DeleteAll(dbc, &TestData{})
+
+	fetchedData = SelectAll[TestData](dbc, nil)
+
+	if len(fetchedData) != 0 {
 		errcheck.CheckTest(errors.New("injected data doesn't match retrieved data"), t)
 	}
 
