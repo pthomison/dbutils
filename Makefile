@@ -1,7 +1,15 @@
 test:
 	go test ./... -v -count=1
 
-NEXT_TAG=$(shell exoskeleton rev -i $(shell git tag --sort version:refname | tail -n 1))
+CURRENT_TAG=$(shell git tag --sort version:refname | tail -n 1)
+
+first_release:
+	git tag 0.0.1
+	git push origin 0.0.1
+
+rev_release:
+	git tag $(shell exoskeleton rev -i $(CURRENT_TAG))
+	git push origin $(shell exoskeleton rev -i $(CURRENT_TAG))
+
 release:
-	git tag $(NEXT_TAG)
-	git push origin $(NEXT_TAG)
+	if [[ "$(CURRENT_TAG)" == "" ]]; then $(MAKE) first_release; else $(MAKE) rev_release; fi
