@@ -1,8 +1,6 @@
 package dbutils
 
 import (
-	"fmt"
-
 	"github.com/pthomison/errcheck"
 	"github.com/spf13/cobra"
 	"gorm.io/gorm"
@@ -21,11 +19,8 @@ func Migrate(c DBClient, obj interface{}) {
 }
 
 func Create[T any](c DBClient, objs []T) {
-	fmt.Println(objs)
 	result := c.DB().Create(&objs)
 	errcheck.Check(result.Error)
-	fmt.Printf("%+v\n", result)
-
 }
 
 func CreateOrOverwrite[T any](c DBClient, objs []T) {
